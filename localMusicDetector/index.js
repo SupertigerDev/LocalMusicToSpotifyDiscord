@@ -2,23 +2,38 @@ const Spotify = require('node-spotify-api');
 const getPlayibngTrack = require("./getPlayingTrack");
 const { setInterval } = require('timers');
 
-const server = require('http').createServer();
-const io = require('socket.io')(server);
+var app = require('express')();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
 let currentPlayingTrack = null;
 
+
+let spotify = null;
+
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
 io.on("connection", s => {
   currentPlayingTrack = null;
-  checkNewTrackPlaying();
+  s.on("sendDetails", ({id, secret}) => {
+    currentPlayingTrack = null;
+    checkNewTrackPlaying();
+    spotify = new Spotify({
+      id,
+      secret
+    });
+  })
 })
 
-server.listen(3000);
-
-
-const spotify = new Spotify({
-  id: "08ec2001dc224dbc9f36c10302352052",
-  secret: "8c7f32c74c5f49ed9d8cb7cbc2ea1944"
+http.listen(3000, () => {
+  console.log('Go To http://localhost:3000');
 });
+
+
+
 
 
 
@@ -30,11 +45,13 @@ setInterval(() => {
 
 
 async function checkNewTrackPlaying() {
+  if (!spotify) return; 
   const newCheckTrack = getPlayibngTrack();
   if (newCheckTrack !== null && currentPlayingTrack === null) {
     currentPlayingTrack = null;
     stopSong();
   }
+  if (!newCheckTrack) return;
 
   const name = newCheckTrack.title + " " + newCheckTrack.artist;
   if (currentPlayingTrack === name) return;

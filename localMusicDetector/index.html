@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+        <style>
+            body {
+                background: black;
+                color: white;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #content {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            Make sure to allow popups and reload the page.<br/>
+            Make sure to not close any tabs related to spotify and this.<br/>
+            To make this work, you will need to generate a id and a secret from spotify dashboard
+            <a href="https://developer.spotify.com/dashboard/" target="_blank" rel="noopener noreferrer">from here</a>.
+            This is used to get the song url.<br/>
+            <input id="client-id" type="text" placeholder="Client ID"><br/>
+            <input id="client-secret" type="password" placeholder="Client Secret"><br><br>
+            <button id="start-button">update</button>
+        </div>
+        <div id="connectiong">Connecting... Make sure you have ran the server.</div>
+    </body>
+    
+    <script>
+
+        var socket = io("http://localhost:3000");
+
+        socket.on("connect", () => {
+            document.getElementById("content").style.display = "block";
+            document.getElementById("connectiong").style.display = "none";
+            sendDetails();
+        })
+
+        function sendDetails (){
+            const id = localStorage.getItem("id")
+            const secret = localStorage.getItem("secret")
+
+            document.getElementById("client-id").value = id;
+            document.getElementById("client-secret").value = secret;
+            if (!id || !secret) return;
+            socket.emit("sendDetails", {id, secret});
+        }
+
+        document.getElementById("start-button").addEventListener("click", () => {
+            const id = document.getElementById("client-id").value;
+            const secret = document.getElementById("client-secret").value;
+            localStorage.setItem("id", id)
+            localStorage.setItem("secret", secret)
+            sendDetails();
+        })
+    
+
+        let _window = null;
+        socket.on("openURL", url => {
+            console.log("opening")
+            if (_window) {
+                _window.location.href = url
+            } else {
+                _window = window.open(url, '_blank');
+            }
+        })
+    </script>
+</html>
