@@ -1,0 +1,15 @@
+{
+  "name": "mediaToSpotify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "carlo": "^0.9.46",
+    "node-spotify-api": "^1.1.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {}
+}
