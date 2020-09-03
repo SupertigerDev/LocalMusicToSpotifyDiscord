@@ -2,10 +2,10 @@
 Show what local music your playing in Discord using Spotify
 
 # Requirements:
-Windows 10
-Discord (ofc)
-Spotify account
-Discord linked with your Spotify account
+• Windows 10
+• Discord (ofc)
+• Spotify account
+• Discord linked with your Spotify account
 
 # How to use
 1. Login to Spotify in a browser
