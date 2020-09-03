@@ -2,6 +2,8 @@
 Show what local music your playing in Discord using Spotify.  
 Note: This was just a rushed project. It uses some hacky ways to make this work. Don't scream after looking at the code D:
 
+Demo: https://www.youtube.com/watch?v=zv-X889aEAE
+
 # Requirements:
 • Windows 10  
 • Discord (ofc)  
